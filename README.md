@@ -1,12 +1,25 @@
+# Deploy a cloud-native application automatically
+
+The code in this repository supports a Learn module focused on automating CI/CD with .NET. The module shows you how to:
+
+- Authenticate GitHub Actions to a container registry.
+- Securely store sensitive information that GitHub Actions uses.
+- Implement an action to build the container image for a microservice.
+- Modify and commit the microservice code to trigger a build.
+- Implement an action to deploy the updated container to an Azure Kubernetes Service (AKS) cluster.
+- Modify and commit a Helm chart to trigger the deployment.
+- Revert the microservice to the previous deployment.
+
+Take the moudle on [Microsoft Learn Training](https://learn.microsoft.com/training/modules/microservices-devops-aspnet-core/)
 
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+the rights to use your contribution. For details, visit https://cla.microsoft.com.
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
+When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
 provided by the bot. You will only need to do this once across all repos using our CLA.
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
