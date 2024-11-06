@@ -1,45 +1,32 @@
 ﻿using DataEntities;
-using System.Text.Json;
 
 namespace Store.Services;
 
-public class ProductService
+internal sealed class ProductService(HttpClient httpClient, ILogger<ProductService> logger)
 {
-    HttpClient httpClient;
-    private readonly ILogger<ProductService> _logger;
-
-    public ProductService(HttpClient httpClient, ILogger<ProductService> logger)
-    {
-		_logger = logger;
-        this.httpClient = httpClient;
-    }
-    public async Task<List<Product>> GetProducts()
+    public async Task<List<Product>> GetProductsAsync()
     {
         List<Product>? products = null;
-		try
-		{
-	    	var response = await httpClient.GetAsync("/api/Product");
-	    	var responseText = await response.Content.ReadAsStringAsync();
 
-			_logger.LogInformation($"Http status code: {response.StatusCode}");
-    	    _logger.LogInformation($"Http response content: {responseText}");
+        try
+        {
+            var response = await httpClient.GetAsync("/api/Product");
+            var responseText = await response.Content.ReadAsStringAsync();
 
-		    if (response.IsSuccessStatusCode)
-		    {
-				var options = new JsonSerializerOptions
-				{
-		    		PropertyNameCaseInsensitive = true
-				};
+            logger.LogInformation("Http status code: {StatusCode}", response.StatusCode);
+            logger.LogInformation("Http response content: {ResponseText}", responseText);
 
-				products = await response.Content.ReadFromJsonAsync(ProductSerializerContext.Default.ListProduct);
-	   		 }
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, "Error during GetProducts.");
-		}
+            if (response.IsSuccessStatusCode)
+            {
+                products = await response.Content.ReadFromJsonAsync(ProductSerializerContext.Default.ListProduct);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error during GetProducts.");
+        }
 
-		return products ?? new List<Product>();
+        return products ?? [];
     }
-    
+
 }
