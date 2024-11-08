@@ -2,7 +2,7 @@
 
 namespace DataEntities;
 
-public class Product
+public sealed class Product
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
