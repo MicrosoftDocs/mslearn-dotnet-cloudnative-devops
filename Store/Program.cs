@@ -3,13 +3,11 @@ using Store.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<ProductService>();
-builder.Services.AddHttpClient<ProductService>(c =>
-{
-    var url = builder.Configuration["ProductEndpoint"] ?? throw new InvalidOperationException("ProductEndpoint is not set");
+var productEndpoint = builder.Configuration["ProductEndpoint"]
+                      ?? throw new InvalidOperationException("ProductEndpoint is not set");
 
-    c.BaseAddress = new(url);
-});
+builder.Services.AddSingleton<ProductService>();
+builder.Services.AddHttpClient<ProductService>(c => c.BaseAddress = new Uri(productEndpoint));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

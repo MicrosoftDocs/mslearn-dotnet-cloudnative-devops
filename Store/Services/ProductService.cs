@@ -28,5 +28,4 @@ internal sealed class ProductService(HttpClient httpClient, ILogger<ProductServi
 
         return products ?? [];
     }
-
 }

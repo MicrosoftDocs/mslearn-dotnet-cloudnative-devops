@@ -1,4 +1,5 @@
 ﻿using DataEntities;
+using Microsoft.EntityFrameworkCore;
 using Products.Data;
 
 namespace Products.Endpoints;
@@ -14,10 +15,10 @@ public static class ProductEndpoints
             .Produces<List<Product>>(StatusCodes.Status200OK);
 
         group.MapGet("/{id}", async (int id, ProductDataContext db) => await db.Product.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.Id == id)
-                is Product model
-                    ? Results.Ok(model)
-                    : Results.NotFound())
+                    .FirstOrDefaultAsync(model => model.Id == id)
+                is { } model
+                ? Results.Ok(model)
+                : Results.NotFound())
             .WithName("GetProductById")
             .Produces<Product>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
@@ -27,11 +28,11 @@ public static class ProductEndpoints
                 var affected = await db.Product
                     .Where(model => model.Id == id)
                     .ExecuteUpdateAsync(setters => setters
-                      .SetProperty(m => m.Id, product.Id)
-                      .SetProperty(m => m.Name, product.Name)
-                      .SetProperty(m => m.Description, product.Description)
-                      .SetProperty(m => m.Price, product.Price)
-                      .SetProperty(m => m.ImageUrl, product.ImageUrl)
+                        .SetProperty(m => m.Id, product.Id)
+                        .SetProperty(m => m.Name, product.Name)
+                        .SetProperty(m => m.Description, product.Description)
+                        .SetProperty(m => m.Price, product.Price)
+                        .SetProperty(m => m.ImageUrl, product.ImageUrl)
                     );
 
                 return affected is 1 ? Results.Ok() : Results.NotFound();
@@ -55,7 +56,7 @@ public static class ProductEndpoints
                     .Where(model => model.Id == id)
                     .ExecuteDeleteAsync();
 
-                return affected == 1 ? Results.Ok() : Results.NotFound();
+                return affected is 1 ? Results.Ok() : Results.NotFound();
             })
             .WithName("DeleteProduct")
             .Produces<Product>(StatusCodes.Status200OK)
