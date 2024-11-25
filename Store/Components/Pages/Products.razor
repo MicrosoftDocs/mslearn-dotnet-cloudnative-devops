@@ -11,11 +11,11 @@
 
 <p>Here are some of our amazing outdoor products that you can purchase.</p>
 
-@if (products is null)
+@if (_products is null)
 {
     <p><em>Loading...</em></p>
 }
-else if (products.Count is 0)
+else if (_products.Count is 0)
 {
     <p><em>There is a problem loading our products. Please try again later.</em></p>
 }
@@ -31,11 +31,11 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var product in products)
+            @foreach (var product in _products)
             {
                 <tr>
                     <!-- Simulating images being hosted on a CDN -->
-                    <td><img height="80" width="80" src="https://raw.githubusercontent.com/MicrosoftDocs/mslearn-dotnet-cloudnative/main/dotnet-docker/Products/wwwroot/images/@product.ImageUrl"/></td>
+                    <td><img height="80" width="80" src="@(new Uri(_baseUri!, $"images/{product.ImageUrl}"))"/></td>
                     <td>@product.Name</td>
                     <td>@product.Description</td>
                     <td>@product.Price.ToString("C")</td>
@@ -46,11 +46,15 @@ else
 }
 
 @code {
-    private List<Product>? products;
+    private List<Product>? _products;
+    private Uri? _baseUri;
 
     protected override async Task OnInitializedAsync()
     {
+        // Set the base URI from configuration
+        _baseUri = new Uri(Configuration["services:products:https:0"]!);
+
         // Simulate asynchronous loading to demonstrate streaming rendering
-        products = await ProductService.GetProductsAsync();
+        _products = await ProductService.GetProductsAsync();
     }
 }
