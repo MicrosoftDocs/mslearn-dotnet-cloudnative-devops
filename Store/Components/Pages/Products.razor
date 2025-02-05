@@ -52,7 +52,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         // Set the base URI from configuration
-        _baseUri = new Uri(Configuration["services:products:https:0"]!);
+        _baseUri = new Uri(Configuration["ProductEndpointHttps"]!);
 
         // Simulate asynchronous loading to demonstrate streaming rendering
         _products = await ProductService.GetProductsAsync();
