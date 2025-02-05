@@ -46,13 +46,17 @@ else
 }
 
 @code {
+
     private List<Product>? _products;
     private Uri? _baseUri;
 
     protected override async Task OnInitializedAsync()
     {
         // Set the base URI from configuration
-        _baseUri = new Uri(Configuration["ProductEndpointHttps"]!);
+        var productsEndpoint = Configuration["ProductEndpointHttps"] 
+            ?? "https://raw.githubusercontent.com/MicrosoftDocs/mslearn-dotnet-cloudnative/main/dotnet-docker/Products/wwwroot/";
+
+        _baseUri = new Uri(productsEndpoint);
 
         // Simulate asynchronous loading to demonstrate streaming rendering
         _products = await ProductService.GetProductsAsync();
