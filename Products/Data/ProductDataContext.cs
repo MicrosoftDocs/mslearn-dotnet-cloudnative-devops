@@ -1,4 +1,5 @@
 ﻿using DataEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Products.Data;
 
