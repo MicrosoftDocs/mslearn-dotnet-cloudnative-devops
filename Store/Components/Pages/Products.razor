@@ -2,7 +2,6 @@
 @using DataEntities
 @using Store.Services
 @inject ProductService ProductService
-@inject IConfiguration Configuration
 @attribute [StreamRendering(true)]
 
 <PageTitle>Products</PageTitle>
@@ -35,7 +34,7 @@ else
             {
                 <tr>
                     <!-- Simulating images being hosted on a CDN -->
-                    <td><img height="80" width="80" src="@(new Uri(_baseUri!, $"images/{product.ImageUrl}"))"/></td>
+                    <td><img height="80" width="80" src="@(product.ImageUrl)"/></td>
                     <td>@product.Name</td>
                     <td>@product.Description</td>
                     <td>@product.Price.ToString("C")</td>
@@ -48,16 +47,9 @@ else
 @code {
 
     private List<Product>? _products;
-    private Uri? _baseUri;
 
     protected override async Task OnInitializedAsync()
     {
-        // Set the base URI from configuration
-        var productsEndpoint = Configuration["ProductEndpointHttps"] 
-            ?? "https://raw.githubusercontent.com/MicrosoftDocs/mslearn-dotnet-cloudnative/main/dotnet-docker/Products/wwwroot/";
-
-        _baseUri = new Uri(productsEndpoint);
-
         // Simulate asynchronous loading to demonstrate streaming rendering
         _products = await ProductService.GetProductsAsync();
     }
