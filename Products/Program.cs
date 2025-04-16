@@ -4,8 +4,8 @@ using Products.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var productsContext = builder.Configuration.GetConnectionString("ProductsContext") ??
-                      throw new InvalidOperationException("Connection string 'ProductsContext' not found.");
+var productsContext = builder.Configuration.GetConnectionString("ProductsContext")
+    ?? throw new InvalidOperationException("Connection string 'ProductsContext' not found.");
 
 builder.Services.AddDbContext<ProductDataContext>(options => options.UseSqlite(productsContext));
 
@@ -17,6 +17,6 @@ app.MapProductEndpoints();
 
 app.UseStaticFiles();
 
-app.CreateDbIfNotExists();
+await app.CreateDbIfNotExistsAsync();
 
-app.Run();
+await app.RunAsync();

@@ -4,7 +4,7 @@ using Products.Data;
 
 namespace Products.Endpoints;
 
-public static class ProductEndpoints
+internal static class ProductEndpoints
 {
     public static void MapProductEndpoints(this IEndpointRouteBuilder routes)
     {

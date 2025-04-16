@@ -4,10 +4,12 @@ using Store.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 var productEndpoint = builder.Configuration["ProductEndpoint"]
-                      ?? throw new InvalidOperationException("ProductEndpoint is not set");
+    ?? throw new InvalidOperationException("ProductEndpoint is not set");
 
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddHttpClient<ProductService>(c => c.BaseAddress = new Uri(productEndpoint));
+
+builder.Services.AddHttpForwarderWithServiceDiscovery();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -30,5 +32,7 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.MapForwarder("/api/product/{name}.{ext:regex(^png|jpg$)}", productEndpoint, "/images/{name}.{ext}");
 
 app.Run();
