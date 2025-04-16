@@ -8,7 +8,7 @@ internal static class ProductEndpoints
 {
     public static void MapProductEndpoints(this IEndpointRouteBuilder routes)
     {
-        RouteGroupBuilder group = routes.MapGroup("/api/Product");
+        var group = routes.MapGroup("/api/Product");
 
         group.MapGet("/", async (ProductDataContext db) => await db.Product.ToListAsync())
             .WithName("GetAllProducts")
@@ -25,7 +25,7 @@ internal static class ProductEndpoints
 
         group.MapPut("/{id}", async (int id, Product product, ProductDataContext db) =>
             {
-                int affected = await db.Product
+                var affected = await db.Product
                     .Where(model => model.Id == id)
                     .ExecuteUpdateAsync(setters => setters
                         .SetProperty(m => m.Id, product.Id)
@@ -52,7 +52,7 @@ internal static class ProductEndpoints
 
         group.MapDelete("/{id}", async (int id, ProductDataContext db) =>
             {
-                int affected = await db.Product
+                var affected = await db.Product
                     .Where(model => model.Id == id)
                     .ExecuteDeleteAsync();
 
