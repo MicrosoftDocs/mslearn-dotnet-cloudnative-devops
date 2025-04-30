@@ -35,4 +35,12 @@ app.MapRazorComponents<App>()
 
 app.MapForwarder("/api/product/{name}.{ext:regex(^png|jpg$)}", productEndpoint, "/images/{name}.{ext}");
 
+// Add supported cultures for request localization
+var supportedCultures = new[] { "en-US" };
+var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
 app.Run();
