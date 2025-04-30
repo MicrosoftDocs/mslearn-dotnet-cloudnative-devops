@@ -9,6 +9,7 @@ var productEndpoint = builder.Configuration["ProductEndpoint"]
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddHttpClient<ProductService>(c => c.BaseAddress = new Uri(productEndpoint));
 
+builder.Services.AddServiceDiscovery();
 builder.Services.AddHttpForwarderWithServiceDiscovery();
 
 // Add services to the container.
