@@ -1,0 +1,46 @@
+
+name: Build and deploy an app to AKS
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+  AZURE_CONTAINER_REGISTRY: 'acseshop1776646759'
+  CONTAINER_NAME: 'productservice'
+  RESOURCE_GROUP: 'rg-eshop'
+  CLUSTER_NAME: 'aks-eshop'
+  DEPLOYMENT_MANIFEST_PATH: './product.yml'
+  DOCKER_PATH: './DockerfileProducts.acr'
+
+jobs:
+  buildImage:
+    permissions:
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Login to Azure using OIDC
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Build and push image to Azure Container Registry
+      - name: Build and push image to ACR
+        run: |
+          az acr build \
+            --file ${{ env.DOCKER_PATH }} \
+            --image ${{ env.CONTAINER_NAME }}:${{ github.sha }} \
+            --registry ${{ env.AZURE_CONTAINER_REGISTRY }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            .
